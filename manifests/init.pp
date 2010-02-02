@@ -29,7 +29,7 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
 				5: {
                     package {
                         "pacemaker":
-                            ensure => "1.0.4-23.1",
+                            ensure  => "1.0.4-23.1",
                             require => Package["heartbeat"];
                         "heartbeat":
                             ensure => "2.99.2-8.1";
@@ -40,7 +40,7 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
 		Debian,Ubuntu: {
             package {
                 "pacemaker":
-                    ensure => "1.0.4-1.1anchor",
+                    ensure  => "1.0.4-1.1anchor",
                     require => Package["heartbeat"];
                 "heartbeat":
                     ensure => "2.99.2+sles11r9-1.1anchor";
@@ -74,21 +74,29 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
 	file {
 		"/etc/ha.d/authkeys":
 			ensure => present,
-			mode => 0600;
+			mode   => 0600;
 
 		# logd config, it's very simple and can be the same everywhere
 		"/etc/logd.cf":
 			ensure => present,
-			mode => 0440,
-			owner => root,
-			group => root,
+			mode   => 0440,
+			owner  => "root",
+			group  => "root",
 			source => "puppet:///ha/etc/logd.cf";
-        "/usr/local/bin/is_ha_master":
-            source => "puppet:///ha/usr/local/bin/is_ha_master",
+        
+        # Augeas lenses
+        "/usr/share/augeas/lenses/hacf.aug":
+            ensure => present,
+            mode   => 0444,
             owner  => "root",
             group  => "root",
-            mode   => 0700,
-            ensure => present;
+            source => "puppet:///ha/usr/share/augeas/lenses/hacf.aug";
+        "/usr/share/augeas/lenses/haauthkeys.aug":
+            ensure => present,
+            mode   => 0444,
+            owner  => "root",
+            group  => "root",
+            source => "puppet:///ha/usr/share/augeas/lenses/haauthkeys.aug";
 	}
 
     augeas {
