@@ -332,6 +332,7 @@ parameters (which Pacemaker will try to bring up, causing errors).
 # Realworld example (DRBD & filesystem)
 
 In the following example, we'll configure:
+
 * 2 nodes (ha::node) with STONITH disabled (ha::property)
  - ha1
  - ha2
