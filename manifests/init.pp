@@ -23,10 +23,10 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
 
     $email_content = "Heartbeat config on ${fqdn} has changed."
 
-	case $operatingsystem {
-		RedHat,CentOS: {
-			case $operatingsystemrelease {
-				5: {
+    case $operatingsystem {
+        RedHat,CentOS: {
+            case $operatingsystemrelease {
+                5: {
                     package {
                         "pacemaker":
                             ensure  => "1.0.4-23.1",
@@ -37,7 +37,7 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
                 }
             }
         }
-		Debian,Ubuntu: {
+        Debian,Ubuntu: {
             package {
                 "pacemaker":
                     ensure  => "1.0.4-1.1anchor",
@@ -50,10 +50,10 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
         }
     }
 
-	case $operatingsystem {
+    case $operatingsystem {
         # RHEL packages have this service bundled in with the heartbeat
         # packages.
-		Debian,Ubuntu: {
+        Debian,Ubuntu: {
             service {
                 "logd":
                     ensure    => running,
@@ -71,18 +71,18 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
             require   => [Package["pacemaker"], Package["heartbeat"]];
     }
 
-	file {
-		"/etc/ha.d/authkeys":
-			ensure => present,
-			mode   => 0600;
+    file {
+        "/etc/ha.d/authkeys":
+            ensure => present,
+            mode   => 0600;
 
-		# logd config, it's very simple and can be the same everywhere
-		"/etc/logd.cf":
-			ensure => present,
-			mode   => 0440,
-			owner  => "root",
-			group  => "root",
-			source => "puppet:///ha/etc/logd.cf";
+        # logd config, it's very simple and can be the same everywhere
+        "/etc/logd.cf":
+            ensure => present,
+            mode   => 0440,
+            owner  => "root",
+            group  => "root",
+            source => "puppet:///ha/etc/logd.cf";
         
         # Augeas lenses
         "/usr/share/augeas/lenses/hacf.aug":
@@ -97,7 +97,7 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
             owner  => "root",
             group  => "root",
             source => "puppet:///ha/usr/share/augeas/lenses/haauthkeys.aug";
-	}
+    }
 
     augeas {
         "Setting /files/etc/ha.d/ha.cf/port":
@@ -145,19 +145,19 @@ define ha::node($autojoin="any", $use_logd="on", $compression="bz2",
 }
 
 define ha::mcast($group, $port=694, $ttl=1) {
-	augeas { "Configure multicast group on ${name}":
-		context => "/files/etc/ha.d/ha.cf",
-		changes => [
-		            "set mcast[last()+1]/interface ${name}",
-		            "set mcast[last()]/group ${group}",
-		            "set mcast[last()]/port ${port}",
-		            "set mcast[last()]/ttl ${ttl}",
-		           ],
-		onlyif  => "match mcast/interface[.='${name}'] size == 0",
-	}
-	
-	augeas { "Disable broadcast on ${name}":
-		context => "/files/etc/ha.d/ha.cf",
-		changes => "rm bcast"
-	}
+    augeas { "Configure multicast group on ${name}":
+        context => "/files/etc/ha.d/ha.cf",
+        changes => [
+                    "set mcast[last()+1]/interface ${name}",
+                    "set mcast[last()]/group ${group}",
+                    "set mcast[last()]/port ${port}",
+                    "set mcast[last()]/ttl ${ttl}",
+                   ],
+        onlyif  => "match mcast/interface[.='${name}'] size == 0",
+    }
+    
+    augeas { "Disable broadcast on ${name}":
+        context => "/files/etc/ha.d/ha.cf",
+        changes => "rm bcast"
+    }
 }
