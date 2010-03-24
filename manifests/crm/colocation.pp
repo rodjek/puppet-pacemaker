@@ -15,12 +15,12 @@ define ha::crm::colocation($score, $resource1_name, $resource1_role = "", $resou
 		if($ensure == absent) {
 			exec { "Removing colocation constraint ${name}":
 				command => "/usr/sbin/crm configure delete ${name}",
-				onlyif  => "/usr/sbin/crm configure show | grep ${name}",
+				onlyif  => "/usr/sbin/crm configure show colocation ${name} > /dev/null 2&>1",
 			}
 		} else {
 			exec { "Create colocation ${name} between ${resource1_name} and ${resource2_name} with score of ${score}":
 				command => "/usr/sbin/crm configure colocation ${name} ${score}: ${resource1} ${resource2}",
-				unless  => "/usr/sbin/crm_resource -r ${resource1_name} -a  | grep ${name} > /dev/null 2>&1",
+				unless  => "/usr/sbin/crm configure show colocation ${name} > /dev/null 2>&1",
 			}
 		}
 	}
