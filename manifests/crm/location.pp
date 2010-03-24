@@ -1,9 +1,9 @@
 define ha::crm::location($ensure=present, $resource, $score, $rule = '', $host = '', $ignore_dc="false") {
 	if $rule == '' and $host == '' {
-		fail("Must specify one of rule or host in Ha::Location[${name}]")
+		fail("Must specify one of rule or host in Ha::Crm::Location[${name}]")
 	}
 	if $rule != '' and $host != '' {
-		fail("Only one of rule and host can be specified in Ha::Location[${name}]")
+		fail("Only one of rule and host can be specified in Ha::Crm::Location[${name}]")
 	}
 	
 	if $rule == '' {
