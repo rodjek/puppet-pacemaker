@@ -1,12 +1,12 @@
-define ha::crm::order($score, $first_name, $first_action="undef", $then_name, $then_action="undef", $ensure = present) {
+define ha::crm::order($score, $first_name, $first_action="", $then_name, $then_action="", $ensure = present) {
 	if($ha_cluster_dc == $fqdn) {
-		if($first_action != "undef") {
+		if($first_action != "") {
 			$first = "${first_name}:${first_action}"
 		} else {
 			$first = $first_name
 		}
 
-		if($then_action != "undef") {
+		if($then_action != "") {
 			$then = "${then_name}:${then_action}"
 		} else {
 			$then = $then_name
