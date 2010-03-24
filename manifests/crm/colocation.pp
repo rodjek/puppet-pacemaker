@@ -1,12 +1,12 @@
-define ha::crm::colocation($score, $resource1_name, $resource1_role = "undef", $resource2_name, $resource2_role = "undef", $ensure = present) {
+define ha::crm::colocation($score, $resource1_name, $resource1_role = "", $resource2_name, $resource2_role = "", $ensure = present) {
 	if($ha_cluster_dc == $fqdn) {
-		if($resource1_role != "undef") {
+		if($resource1_role != "") {
 			$resource1 = "${resource1_name}:${resource1_role}"
 		} else {
 			$resource1 = $resource1_name
 		}
 
-		if($resource2_role != "undef") {
+		if($resource2_role != "") {
 			$resource2 = "${resource2_name}:${resource2_role}"
 		} else {
 			$resource2 = $resource2_name
