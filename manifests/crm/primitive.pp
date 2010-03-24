@@ -44,81 +44,70 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                 unless  => "/usr/sbin/crm_resource -r ${name} -t primitive -q > /dev/null 2>&1",
             }
 
-            ha::crm::metaparameter { "${name}-priority":
-                resource  => $name,
-                parameter => "priority",
-                value     => $priority,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $priority ? {
-                    ""      => absent,
-                    default => present,
-                },
-            }
-
-            ha::crm::metaparameter { "${name}-target_role":
-                resource  => $name,
-                parameter => "target-role",
-                value     => $target_role,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $target_role ? {
-                    ""      => absent,
-                    default => present,
-                },
-            }
-     
-            ha::crm::metaparameter { "${name}-is_managed":
-                resource  => $name,
-                parameter => "is-managed",
-                value     => $is_managed,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $is_managed ? {
-                    ""      => absent,
-                    default => present,
-                },
-            }
-
-            ha::crm::metaparameter { "${name}-resource_stickiness":
-                resource  => $name,
-                parameter => "resource-stickiness",
-                value     => $resource_stickiness,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $resource_stickiness ? {
-                    ""      => absent,
-                    default => present,
-                },
-            }
-
-            ha::crm::metaparameter { "${name}-migration_threshold":
-                resource  => $name,
-                parameter => "migration-threshold",
-                value     => $migration_threshold,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $migration_threshold ? {
-                    ""      => absent,
-                    default => present,
-                },
-            }
-
-            ha::crm::metaparameter { "${name}-failure_timeout":
-                resource  => $name,
-                parameter => "failure-timeout",
-                value     => $failure_timeout,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $failure_timeout ? {
-                    ""      => absent,
-                    default => present,
-                },
-            }
-
-            ha::crm::metaparameter { "${name}-mulitple_active":
-                resource  => $name,
-                parameter => "multiple-active",
-                value     => $multiple_active,
-                require   => Exec["Creating primitive ${name}"],
-                ensure    => $multiple_active ? {
-                    ""      => absent,
-                    default => present,
-                },
+            ha::crm::metaparameter { 
+                "${name}-priority":
+                    resource  => $name,
+                    parameter => "priority",
+                    value     => $priority,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $priority ? {
+                        ""      => absent,
+                        default => present,
+                    };
+                "${name}-target_role":
+                    resource  => $name,
+                    parameter => "target-role",
+                    value     => $target_role,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $target_role ? {
+                        ""      => absent,
+                        default => present,
+                    };
+                "${name}-is_managed":
+                    resource  => $name,
+                    parameter => "is-managed",
+                    value     => $is_managed,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $is_managed ? {
+                        ""      => absent,
+                        default => present,
+                    };
+                "${name}-resource_stickiness":
+                    resource  => $name,
+                    parameter => "resource-stickiness",
+                    value     => $resource_stickiness,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $resource_stickiness ? {
+                        ""      => absent,
+                        default => present,
+                    };
+                "${name}-migration_threshold":
+                    resource  => $name,
+                    parameter => "migration-threshold",
+                    value     => $migration_threshold,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $migration_threshold ? {
+                        ""      => absent,
+                        default => present,
+                    };
+                "${name}-failure_timeout":
+                    resource  => $name,
+                    parameter => "failure-timeout",
+                    value     => $failure_timeout,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $failure_timeout ? {
+                        ""      => absent,
+                        default => present,
+                    };
+                "${name}-mulitple_active":
+                    resource  => $name,
+                    parameter => "multiple-active",
+                    value     => $multiple_active,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $multiple_active ? {
+                        ""      => absent,
+                        default => present,
+                    };
             }
         }
     }
