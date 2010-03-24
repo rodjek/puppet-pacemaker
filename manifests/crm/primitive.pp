@@ -50,6 +50,10 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                     parameter => "priority",
                     value     => $priority,
                     require   => Exec["Creating primitive ${name}"],
+                    ensure    => $priority ? {
+                        ""      => absent,
+                        default => present,
+                    },
                 }
             }
 
@@ -59,6 +63,10 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                     parameter => "target-role",
                     value     => $target_role,
                     require   => Exec["Creating primitive ${name}"],
+                    ensure    => $target_role ? {
+                        ""      => absent,
+                        default => present,
+                    },
                 }
             }
         
@@ -68,17 +76,25 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                     parameter => "is-managed",
                     value     => $is_managed,
                     require   => Exec["Creating primitive ${name}"],
+                    ensure    => $is_managed ? {
+                        ""      => absent,
+                        default => present,
+                    },
                 }
             }
 
-			if($resource_stickiness != "") {
-				ha::crm::metaparameter { "${name}-resource_stickiness":
-					resource  => $name,
-					parameter => "resource-stickiness",
-					value     => $resource_stickiness,
-					require   => Exec["Creating primitive ${name}"],
-				}
-			}
+            if($resource_stickiness != "") {
+                ha::crm::metaparameter { "${name}-resource_stickiness":
+                    resource  => $name,
+                    parameter => "resource-stickiness",
+                    value     => $resource_stickiness,
+                    require   => Exec["Creating primitive ${name}"],
+                    ensure    => $resource_stickiness ? {
+                        ""      => absent,
+                        default => present,
+                    },
+                }
+            }
 
             if($migration_threshold != "") {
                 ha::crm::metaparameter { "${name}-migration_threshold":
@@ -86,6 +102,10 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                     parameter => "migration-threshold",
                     value     => $migration_threshold,
                     require   => Exec["Creating primitive ${name}"],
+                    ensure    => $migration_threshold ? {
+                        ""      => absent,
+                        default => present,
+                    },
                 }
             }
 
@@ -95,6 +115,10 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                     parameter => "failure-timeout",
                     value     => $failure_timeout,
                     require   => Exec["Creating primitive ${name}"],
+                    ensure    => $failure_timeout ? {
+                        ""      => absent,
+                        default => present,
+                    },
                 }
             }
 
@@ -104,6 +128,10 @@ define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $i
                     parameter => "multiple-active",
                     value     => $multiple_active,
                     require   => Exec["Creating primitive ${name}"],
+                    ensure    => $multiple_active ? {
+                        ""      => absent,
+                        default => present,
+                    },
                 }
             }
         }
