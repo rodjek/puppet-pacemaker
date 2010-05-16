@@ -6,11 +6,7 @@ Puppet::Type.newtype(:ha_crm_primitive) do
     newparam(:class) do
         desc "The standard that the script conforms to."
 
-        validate do |value|
-            unless value =~ /^(heartbeat|lsb|ocf|stonith)$/ do
-                raise ArgumentError, "%s is not a valid Resource Agent class" % value
-            end
-        end
+        newvalues(:heartbeat, :lsb, :ocf, :stonith)
     end
 
     newparam(:type) do
