@@ -38,4 +38,22 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
             crm_resource "-m", "-r", resource[:id], "-p", "priority", "-v", value
         end
     end
+
+    def target_role
+        cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
+        nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='target-role']")
+        if nvpair.nil?
+            :absent
+        else
+            nvpair.attribute(:value).value
+        end
+    end
+
+    def target_role=(value)
+        if value == :started
+            crm_resource "-m", "-r", resource[:id], "-d", "target-role"
+        else
+            crm_resource "-m", "-r", resource[:id], "-p", "target-role", "-v", value.to_s.capitalize
+        end
+    end
 end

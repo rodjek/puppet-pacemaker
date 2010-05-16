@@ -25,6 +25,18 @@ Puppet::Type.newtype(:ha_crm_primitive) do
         defaultto "0"        
     end
 
+    newproperty(:target_role) do
+        desc "What state should the cluster attempt to keep this resource in?
+        
+              Allowed values:
+                * stopped - Force the resource not to run
+                * started - Allow the resource to be started
+                * master -  Allow the resource to be started and promoted to Master"
+
+        newvalues(:stopped, :started, :master)
+        defaultto :started
+    end
+
     validate do
         raise Puppet::Error, "You must specify a class for this primitive" unless @parameters.include?(:class)
         raise Puppet::Error, "You must specify a type for this primitive" unless @parameters.include?(:type)
