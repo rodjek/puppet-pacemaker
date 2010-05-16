@@ -110,4 +110,22 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
             crm_resource "-m", "-r", resource[:id], "-p", "migration-threshold", "-v", value.to_s
         end
     end
+
+    def failure_timeout
+        cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
+        nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='failure-timeout']")
+        if nvpair.nil?
+            :absent
+        else
+            nvpair.attribute(:value).value
+        end
+    end
+
+    def failure_timeout=(value)
+        if value == "0"
+            crm_resource "-m", "-r", resource[:id], "-d", "failure-timeout"
+        else
+            crm_resource "-m", "-r", resource[:id], "-p", "failure-timeout", "-v", value.to_s
+        end
+    end
 end

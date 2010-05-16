@@ -62,6 +62,15 @@ Puppet::Type.newtype(:ha_crm_primitive) do
         defaultto "0"
     end
 
+    newproperty(:failure_timeout) do
+        desc "How many seconds to wait before acting as if the failure had
+              not occurred (and potentially allowing the resource back to the
+              node on which it failed."
+    
+        newvalues(/\d+/)
+        defaultto "0"
+    end
+
     validate do
         raise Puppet::Error, "You must specify a class for this primitive" unless @parameters.include?(:class)
         raise Puppet::Error, "You must specify a type for this primitive" unless @parameters.include?(:type)
