@@ -1,4 +1,9 @@
 Puppet::Type.newtype(:ha_crm_primitive) do
+    # TODO
+    #
+    # * Set the default ensure value to true
+    # * The ablity to run the resources only on the DC
+
     @doc = "Manage Pacemaker primitives"
 
     ensurable
