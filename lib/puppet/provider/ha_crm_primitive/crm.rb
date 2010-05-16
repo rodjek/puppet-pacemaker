@@ -92,4 +92,22 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
             crm_resource "-m", "-r", reosurce[:id], "-p", "resource-stickiness", "-v", value.to_s
         end
     end
+
+    def migration_threshold
+        cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
+        nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='migration-threshold']")
+        if nvpair.nil?
+            :absent
+        else
+            nvpair.attribute(:value).value
+        end
+    end
+
+    def migration_threshold=(value)
+        if value == "0"
+            crm_resource "-m", "-r", resource[:id], "-d", "migration-threshold"
+        else
+            crm_resource "-m", "-r", resource[:id], "-p", "migration-threshold", "-v", value.to_s
+        end
+    end
 end

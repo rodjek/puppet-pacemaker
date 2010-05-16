@@ -54,6 +54,14 @@ Puppet::Type.newtype(:ha_crm_primitive) do
         defaultto :inherited
     end
 
+    newproperty(:migration_threshold) do
+        desc "How many failures should occur for this resource on a node
+              before making the node ineligible to host this resource."
+
+        newvalues(/\d+/)
+        defaultto "0"
+    end
+
     validate do
         raise Puppet::Error, "You must specify a class for this primitive" unless @parameters.include?(:class)
         raise Puppet::Error, "You must specify a type for this primitive" unless @parameters.include?(:type)
