@@ -7,7 +7,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
     commands :crm_resource => "crm_resource"
 
     def create
-        crm "configure", "primitive", resource[:id], "#{resource[:class]}:#{resource[:type]}"
+        crm "configure", "primitive", resource[:id], resource[:type]
     end
 
     def destroy
