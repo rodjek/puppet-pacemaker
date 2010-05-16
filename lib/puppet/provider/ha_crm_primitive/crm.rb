@@ -56,4 +56,40 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
             crm_resource "-m", "-r", resource[:id], "-p", "target-role", "-v", value.to_s.capitalize
         end
     end
+
+    def is_managed
+        cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
+        nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='is-managed']")
+        if nvpair.nil?
+            :absent
+        else
+            nvpair.attribute(:value).value
+        end
+    end
+
+    def is_managed=(value)
+        if value == :true
+            crm_resource "-m", "-r", resource[:id], "-d", "is-managed"
+        else
+            crm_resource "-m", "-r", resource[:id], "-p", "is-managed", "-v", value.to_s
+        end
+    end
+
+    def resource_stickiness
+        cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
+        nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='resource-stickiness']")
+        if nvpair.nil?
+            :absent
+        else
+            nvpair.attribute(:value).value
+        end
+    end
+
+    def resource_stickiness=(value)
+        if value == :inherited
+            crm_resource "-m", "-r", resource[:id], "-d", "resource-stickiness"
+        else
+            crm_resource "-m", "-r", reosurce[:id], "-p", "resource-stickiness", "-v", value.to_s
+        end
+    end
 end

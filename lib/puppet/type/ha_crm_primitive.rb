@@ -37,6 +37,23 @@ Puppet::Type.newtype(:ha_crm_primitive) do
         defaultto :started
     end
 
+    newproperty(:is_managed) do
+        desc "Is the cluster allowed to start and stop the resource?"
+
+        newvalues(:true, :false)
+        defaultto :true
+    end
+
+    newproperty(:resource_stickiness) do
+        desc "How much does the resource prefer to stay where it is?
+
+              This defaults to 'inherited', which is the value of 
+              resource-stickiness in the rsc_defaults section"
+
+        newvalues(:inherited, /\d+/)
+        defaultto :inherited
+    end
+
     validate do
         raise Puppet::Error, "You must specify a class for this primitive" unless @parameters.include?(:class)
         raise Puppet::Error, "You must specify a type for this primitive" unless @parameters.include?(:type)
