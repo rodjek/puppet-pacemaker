@@ -18,6 +18,15 @@ Puppet::Type.newtype(:ha_crm_primitive) do
         isnamevar
     end
 
+    newparam(:only_run_on_dc, :boolean => true) do
+        desc "In order to prevent race conditions, we generally only want to
+              make changes to the CIB on a single machine (in this case, the
+              Designated Controller)."
+
+        newvalues(:true, :false)
+        defaultto(:true)
+    end
+
     newproperty(:priority) do
         desc "The priority of the resource"
 
