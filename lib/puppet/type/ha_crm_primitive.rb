@@ -71,6 +71,20 @@ Puppet::Type.newtype(:ha_crm_primitive) do
         defaultto "0"
     end
 
+    newproperty(:multiple_active) do
+        desc "What should the cluster do if it ever finds the resource active
+              on more than one node.
+
+              Allowed values:
+                * block      - Mark the resource as unmanaged
+                * stop_only  - Stop all active instances and leave them that way
+                * stop_start - Stop all active instances and start the resource
+                               in one location only."
+    
+        newvalues(:block, :stop_only, :stop_start)
+        defaultto :stop_start
+    end
+
     validate do
         raise Puppet::Error, "You must specify a class for this primitive" unless @parameters.include?(:class)
         raise Puppet::Error, "You must specify a type for this primitive" unless @parameters.include?(:type)

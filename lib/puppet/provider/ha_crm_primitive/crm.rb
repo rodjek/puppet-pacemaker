@@ -128,4 +128,22 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
             crm_resource "-m", "-r", resource[:id], "-p", "failure-timeout", "-v", value.to_s
         end
     end
+
+    def multiple_active
+        cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
+        nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='multiple-active']")
+        if nvpair.nil?
+            :absent
+        else
+            nvpair.attribute(:value).value
+        end
+    end
+
+    def multiple_active=(value)
+        if value == :stop_start
+            crm_resource "-m", "-r", resource[:id], "-d", "multiple-active"
+        else
+            crm_resource "-m", "-r", resource[:id], "-p", "multiple-active", "-v", value.to_s
+        end
+    end
 end
