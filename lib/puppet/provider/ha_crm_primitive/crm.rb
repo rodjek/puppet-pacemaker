@@ -7,25 +7,25 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
     commands :crm_resource => "crm_resource"
 
     def create
-        crm "configure", "primitive", resource[:id], resource[:type]
+        crm "-F", "configure", "primitive", resource[:id], resource[:type]
     end
 
     def destroy
-        crm "configure", "delete", resource[:id]
+        crm "-F", "configure", "delete", resource[:id]
     end
 
     def exists?
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-        resource = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']")
+        primitive = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']")
 
-        !resource.nil?
+        !primitive.nil?
     end
 
     def priority
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='priority']")
         if nvpair.nil?
-            :absent
+            resource.property(:priority).default
         else
             nvpair.attribute(:value).value
         end
@@ -43,7 +43,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='target-role']")
         if nvpair.nil?
-            :absent
+            resource.property(:target_role).default
         else
             nvpair.attribute(:value).value
         end
@@ -61,7 +61,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='is-managed']")
         if nvpair.nil?
-            :absent
+            resource.property(:is_managed).default
         else
             nvpair.attribute(:value).value
         end
@@ -79,7 +79,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='resource-stickiness']")
         if nvpair.nil?
-            :absent
+            resource.property(:resource_stickiness).default
         else
             nvpair.attribute(:value).value
         end
@@ -97,7 +97,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='migration-threshold']")
         if nvpair.nil?
-            :absent
+            resource.property(:migration_threshold).default
         else
             nvpair.attribute(:value).value
         end
@@ -115,7 +115,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='failure-timeout']")
         if nvpair.nil?
-            :absent
+            resource.property(:failure_timeout).default
         else
             nvpair.attribute(:value).value
         end
@@ -133,7 +133,7 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
         cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
         nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='multiple-active']")
         if nvpair.nil?
-            :absent
+            resource.property(:multiple_active).default
         else
             nvpair.attribute(:value).value
         end
