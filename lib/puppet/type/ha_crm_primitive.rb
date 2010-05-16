@@ -21,7 +21,8 @@ Puppet::Type.newtype(:ha_crm_primitive) do
     newproperty(:priority) do
         desc "The priority of the resource"
 
-        defaultto "0"        
+        newvalues(:absent, /\d+/)
+        defaultto :absent
     end
 
     newproperty(:target_role) do
@@ -32,15 +33,15 @@ Puppet::Type.newtype(:ha_crm_primitive) do
                 * started - Allow the resource to be started
                 * master -  Allow the resource to be started and promoted to Master"
 
-        newvalues(:stopped, :started, :master)
-        defaultto :started
+        newvalues(:absent, :stopped, :started, :master)
+        defaultto :absent
     end
 
     newproperty(:is_managed) do
         desc "Is the cluster allowed to start and stop the resource?"
 
-        newvalues(:true, :false)
-        defaultto :true
+        newvalues(:absent, :true, :false)
+        defaultto :absent
     end
 
     newproperty(:resource_stickiness) do
@@ -49,16 +50,16 @@ Puppet::Type.newtype(:ha_crm_primitive) do
               This defaults to 'inherited', which is the value of 
               resource-stickiness in the rsc_defaults section"
 
-        newvalues(:inherited, /\d+/)
-        defaultto :inherited
+        newvalues(:absent, /\d+/)
+        defaultto :absent
     end
 
     newproperty(:migration_threshold) do
         desc "How many failures should occur for this resource on a node
               before making the node ineligible to host this resource."
 
-        newvalues(/\d+/)
-        defaultto "0"
+        newvalues(:absent, /\d+/)
+        defaultto :absent
     end
 
     newproperty(:failure_timeout) do
@@ -66,8 +67,8 @@ Puppet::Type.newtype(:ha_crm_primitive) do
               not occurred (and potentially allowing the resource back to the
               node on which it failed."
     
-        newvalues(/\d+/)
-        defaultto "0"
+        newvalues(:absent, /\d+/)
+        defaultto :absent
     end
 
     newproperty(:multiple_active) do
@@ -80,8 +81,8 @@ Puppet::Type.newtype(:ha_crm_primitive) do
                 * stop_start - Stop all active instances and start the resource
                                in one location only."
     
-        newvalues(:block, :stop_only, :stop_start)
-        defaultto :stop_start
+        newvalues(:absent, :block, :stop_only, :stop_start)
+        defaultto :absent
     end
 
     validate do
