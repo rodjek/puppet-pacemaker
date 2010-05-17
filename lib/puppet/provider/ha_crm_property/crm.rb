@@ -2,7 +2,7 @@ require 'rexml/document'
 
 Puppet::Type.type(:ha_crm_property).provide(:crm) do
 
-	command :crm_attribute => "crm_attribute"
+	commands :crm_attribute => "crm_attribute"
 
 	def create
 		crm_attribute "-t", "crm_config", "-n", resource[:name], "-v", resource[:value]
