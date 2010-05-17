@@ -50,380 +50,73 @@ appropriate type, whilst the latter requires a lot more knowledge of how
 pacemaker works, but lets you do anything you want.
 
 
-## ha::property
+## ha_crm_property
 
-Set a cluster-wide property.
+Set a cluster-wide (crm_config) property.
 
-    ha::property { "<property name>":
-        value => "<value>",
+    ha_crm_property { "<property name>":
+        value          => "<value>",
+        ensure         => "(present|absent)",
+        only_run_on_dc => "(true|false)",
     }
 
 ### Example:
     
     ha::property { "stonith-enabled":
-        value => "true",
+        value  => "true",
+        ensure => present,
     }
 
-### Parameters:
+### Required Parameters:
 
 * __namevar:__ The name of the property
 * __value:__   The value of the property
+* __ensure:__  Whether this property should exist in the CIB
 
+### Optional Parameters:
 
-## ha::ip
+* __only_run_on_dc:__ Should Puppet only attempt to manage this resource
+                      if the node is the cluster DC (default: true)
 
-Create an IP that floats around the cluster.  The resource name will be
-"ha-ip-<ip address>" (which is important when you want to co-locate it with
-the service(s) that use it).
-
-### Example:
-
-    ha::ip { faff: address => "192.168.0.1" }
-
-### Parameters:
-
-* __namevar:__ Unimportant.
-* __address:__ The IP address to float.
-
-
-## ha::primitive
+## ha_crm_primitive
 
 Create a primitive (resource).  In almost all cases, this resource will 
-require additional parameters (ha::parameter and/or ha::metaparameter) in 
-order to function correctly.
+require additional parameters (ha_crm_parameter) in order to function correctly.
 
-    ha::primitive { "<primitive name>":
-        monitor_interval => "<time period>",
-        class_name       => "<class name>",
+    ha_crm_primitive { "<primitive name>":
+        type                => "<class>:<provider>:<type>"
+        ensure              => "(present|absent)",
+        only_run_on_dc      => "(true|false)",
+        priority            => "<integer>",
+        target_role         => "(stopped|started|master)",
+        is_managed          => "(true|false)",
+        resource_stickiness => "<integer>",
+        migration_threshold => "<integer>",
+        failure_timeout     => "<integer>",
+        multiple_active     => "(block|stop_only|stop_start)",
     }
 
 ### Example:
 
-    ha::primitive { "fs_mysql":
-        class_name       => "ocf:heartbeat:Filesystem",
-        monitor_interval => "10s",
+    ha_crm_primitive { "fs_mysql":
+        type   => "ocf:heartbeat:Filesystem",
+        ensure => present,
     }
 
-### Parameters:
+### Required Parameters:
 
 * __namevar:__ The name of the primitive (used as a reference for most other ha:: types)
-* __monitor_interval:__ How often to check the health of the primitive
-* __class_name:__       The primitive class (almost always will start with ocf: or lsb:)
+* __type:__ The primitive class (almost always will start with ocf: or lsb:)
+* __ensure:__ Whether this primitive should exist in the CIB
 
+### Optional Parameters:
 
-##ha::parameter
-
-Set a parameter on a defined primitive.  Parameters are used to tell Pacemaker
-how to configure the primitive (i.e. what the filesystem is for a floating
-filesystem).
-
-    ha::parameter { "<some unique string>":
-        resource  => "<resource name>",
-        parameter => "<parameter name>",
-        value     => "<value>",
-    }
-
-### Example:
-    
-    ha::parameter { "fs_mysql-fstype":
-        resource  => "fs_mysql",
-        parameter => "fstype",
-        value     => "ext3",
-    }
-
-### Parameters:
-    
-* __namevar:__ Unimportant
-* __resource:__ The namevar of the ha::primitive that you want to apply the parameter to.
-* __parameter:__ The name of the parameter.
-* __value:__ The value of the parameter.
-
-
-## ha::metaparameter
-
-Set a metaparameter on a defined primitive.  Metaparameters are used to tell
-Pacemaker how to handle the resource (i.e. is the resource managed).
-
-    ha::metaparameter { "<some unique string>":
-        resource  => "<resource name>",
-        parameter => "<parameter name>",
-        value     => "<value>",
-    }
-
-### Example:
-    
-    ha::metaparameter { "fs_mysql-is-managed":
-        resource  => "fs_mysql",
-        parameter => "is-managed",
-        value     => "false",
-    }
-
-### Parameters:
-
-* __namevar:__ Unimportant
-* __resource:__ The namevar of the ha::primitive that you want to apply the metaparameter to.
-* __parameter:__ The name of the metaparameter.
-* __value:__ The value of the metaparameter.
-
-
-## ha::ms
-
-Configure a multi-state resource (stateful cloned resource).
-
-    ha::ms { "<resource name>":
-        primitive       => "<primitive name>",
-        master_max      => "<integer>",
-        master_node_max => "<integer>",
-        clone_max       => "<integer>",
-        clone_node_max  => "<integer>",
-        ha_notify       => "<true|false>",
-    }
-
-### Example:
-
-    ha::ms { "ms_drbd_mysql":
-        primitive       => "drbd_mysql",
-        master_max      => "1",
-        master_node_max => "1",
-        clone_max       => "2",
-        clone_node_max  => "1",
-        ha_notify       => "true",
-    }
-
-### Parameters:
-
-* __namevar:__ Unimportant
-* __primitive:__ The namevar of the ha::primitive
-* __master-max:__ How many copies of the resource can be promoted to Master.
-* __master-node-max:__ How many copies of the resource can be promoted to Master on a single node.
-* __clone_max:__ How many copies of the resource to start.
-* __clone_node_max:__ How many copies of the resource can be started on a single node.
-* __ha_notify:__ Notify the other copies of the resource before and after any actions.
-    
-
-## ha::colocation
-
-Places a resource relative to another resource.  This can be significantly
-more complex than it sounds.  Please make sure that you are familiar with the
-below document before proceeding (a misconfigured colocation constraint can
-bring down a working cluster with ease).
-http://oss.beekhof.net/~beekhof/heartbeat/docs/Colocation-Explained.pdf
-
-    ha::colocation { "<namevar>"
-        score          => "<integer>|inf|-inf",
-        resource1_name => "<first resource name>",
-        resource1_role => "<first resource role (optional)>",
-        resource2_name => "<second resource name>",
-        resource2_role => "<second resource role (optional)>",
-    }
-
-### Example:
-
-    ha::colocation { "fs_mysql_with_drbd_mysql":
-        score          => "inf",
-        resource1_name => "fs_mysql",
-        resource2_name => "ms_drbd_mysql",
-        resource2_role => "Master",
-    }
-
-### Parameters:
-
-* __namevar:__ A unique name for this colocation contstraint.
-* __score:__ Positive values indicate the resources should run on the same node, negative values indicate they should not.
-* __resource1_name:__ The name of the resource to be moved
-* __resource1_role:__ The role that the resource must be in (optional)
-* __resource2_name:__ The name of the target resource.
-* __resource2_role:__ The role that the resource must be in (optional)
-
-
-## ha::order
-
-Creates an order of operations for resources (i.e. promote a DRBD resource
-to Master on a node before mounting the filesystem).
-
-    ha::order {
-        score        => "<integer>|inf|-inf",
-        first_name   => "<first resource name>",
-        first_action => "<first resource action (optional)>",
-        then_name    => "<second resource name>",
-        then_action  => "<second resource action (optional)>",
-    }
-
-### Example:
-
-    ha::order {
-        score        => "inf",
-        first_name   => "ms_drbd_mysql",
-        first_action => "promote",
-        then_name    => "fs_mysql",
-        then_action  => "start",
-    }
-
-### Parameters:
-
-* __namevar:__ A unique name for this ordering constraint.
-* __score:__ Determines whether this ordering constraint is mandatory or only advisory
-* __first_name:__ The name of the first resource
-* __first_action:__ The action to watch for on the first resource (optional)
-* __then_name:__ The name of the second resource 
-* __then_action:__ The action to initiate on the second resource (optional)
-
-
-## ha::location
-
-Decides which nodes a resource can run on.  You can either supply a rule or a
-host in each location constraint, but not both.
-
-    ha::location { "<namevar>":
-        resource => "<resource name>",
-        score    => "<score>",
-        rule     => "<rule> (optional)",
-        host     => "<node> (optional)",
-    }
-
-### Example:
-
-    ha::location { "fs_mysql_on_db1":
-        resource => "fs_mysql",
-        score    => "200",
-        host     => "db1",
-    }
-
-### Parameters:
-
-* __namevar:__ A unique name for this location contstraint.
-* __resource:__ The name of the resource that this constraint applies to.
-* __score:__ Positive values indicate the resource can run on the node, negative values indicate it can not.
-* __host:__ The name of the node that this rule applies to (only if rule not supplied). 
-* __rule:__ A valid rule string (only if host is not supplied).
-
-
-## ha::resetstate
-
-This will cause Pacemaker to reset the state the specified resource (to
-recover from any temporary errors.  This is particularly useful during the
-initial setup of a cluster as Puppet will create primitives without any
-parameters (which Pacemaker will try to bring up, causing errors).
-
-    ha::resetstate { "<some unique string>":
-        resource => "<name of resource to reset>",
-    }
-
-### Example:
-    
-    ha::resetstate { "reset-fs-mysql":
-        resource => "fs_mysql",
-    }
-
-### Parameters:
-    
-* __namevar:__  Unimportant
-* __resource:__ The namevar of the ha::primitive resource that you want to reset
-
-
-# Notes
-
- * Modifying the (meta)?parameters of a primitive/ms will trigger a reset of
-   the state of the primitive/rs.
- * Not all features of heartbeat/pacemaker are currently supported in this
-   module at this time.
-
-
-# Realworld example (DRBD & filesystem)
-
-In the following example, we'll configure:
-
-* 2 nodes (ha::node) with STONITH disabled (ha::property)
- - ha1
- - ha2
-* 2 HA resources (ha::primitive)
- - drbd_test (an existing DRBD device) with the following parameters
-  * drbd-resource => "r0" (should match the resource name in your drbd.conf)
-  * device => "/dev/drbd0" (should match the resource device in your drbd.conf)
- - fs_drbd_test (the DRBD device file system mount) with the following parameters
-  * directory => "/mnt" (the location you want to mount the DRBD device to)
-  * fstype => "ext3" (the filesystem on the DRBD device
-* As the DRBD resource can be in multiple states while still being up (ie Master/Slave), we can configure this resource with ha::ms to reflect this.
-* We then want to ensure that both the DRBD device and the filesystem mount active on the same server (ha::colocation)
-* We also want to ensure that the DRBD device is promoted to Master before attempting to mount it (ha::order)
-
-## site.pp
-
-    node ha1, ha2 {
-        ha::node { "ha": }
-            authkey => "1",
-        }
-    
-        ha::authkey { "1":
-            method => "sha1",
-            key    => "fullofwin",
-        }
-    
-        ha::mcast { ["eth0", "eth1"]:
-            group => "255.0.0.50",
-        }
-    
-        ha::property { "stonith-enabled":
-            value    => "false",
-            before   => Ha::Primitive["drbd_test"],
-        }
-    
-        ha::primitive { 
-            "drbd_test":
-                monitor_interval => "10s",
-                class_name       => "ocf:linbit:drbd";
-            "fs_drbd_test":
-                monitor_interval => "10s",
-                class_name       => "ocf:heartbeat:Filesystem";
-        }
-    
-        ha::parameter { 
-            "drbd_test-drbd-resource":
-                resource  => "drbd_test",
-                parameter => "drbd-resource",
-                value     => "r0",
-                require   => Ha::Primitive["drbd_test"];
-            "fs_drbd_test-device":
-                resource  => "fs_drbd_test",
-                parameter => "device",
-                value     => "/dev/drbd0",
-                require   => Ha::Primitive["fs_drbd_test"];
-            "fs_drbd_test-directory":
-                resource  => "fs_drbd_test",
-                parameter => "directory",
-                value     => "/mnt",
-                require   => Ha::Primitive["fs_drbd_test"];
-            "fs_drbd_test-fstype":
-                resource  => "fs_drbd_test",
-                parameter => "fstype",
-                value     => "ext3",
-                require   => Ha::Primitive["fs_drbd_test"];
-        }
-    
-        ha::ms { "ms_drbd_test":
-            primitive       => "drbd_test",
-            master_max      => "1",
-            master_node_max => "1", 
-            clone_max       => "2", 
-            clone_node_max  => "1", 
-            ha_notify       => "true",
-            require         => Ha::Primitive["drbd_test"],
-        }
-    
-        ha::colocation { "fs_with_drbd":
-            score          => "inf",
-            resource1_name => "fs_drbd_test",
-            resource2_name => "ms_drbd_test",
-            resource2_role => "Master",
-            require        => [Ha::Ms["ms_drbd_test"], Ha::Primitive["fs_drbd_test"]],
-        }
-        
-        ha::order { "fs_after_drbd":
-            score        => "inf",
-            first_name   => "ms_drbd_test",
-            first_action => "promote",
-            then_name    => "fs_drbd_test",
-            then_action  => "start",
-            require      => [Ha::Ms["ms_drbd_test"], Ha::Primitive["fs_drbd_test"]],
-        }
-    }
+* __only_run_on_dc:__ Should Puppet only attempt to manage this resource if the node is the cluster DC (default: true)
+* __priority:__ The priority of the resource
+* __target_role:__ What state should the cluster attempt to keep this resource in?
+* __is_managed:__ Is the cluster allowed to start and stop the resource?
+* __resource_stickiness:__ How much does the resource prefer to stay where it is?
+* __migration_threshold:__ How many failures should occur for this resource on a node
+                           before making the node ineligible to host this resource.
+*__failure_timeout:__ How many seconds to wait before acting as if the failure had not occurred
+*__multiple_active:__ What should the cluster do if it ever finds the resource active on more than one node
