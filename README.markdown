@@ -62,7 +62,7 @@ Set a cluster-wide (crm_config) property.
 
 ### Example:
     
-    ha::property { "stonith-enabled":
+    ha_crm_property { "stonith-enabled":
         value  => "true",
         ensure => present,
     }
@@ -75,8 +75,7 @@ Set a cluster-wide (crm_config) property.
 
 ### Optional Parameters:
 
-* __only_run_on_dc:__ Should Puppet only attempt to manage this resource
-                      if the node is the cluster DC (default: true)
+* __only_run_on_dc:__ Should Puppet only attempt to manage this resource if the node is the cluster DC (default: true)
 
 ## ha_crm_primitive
 
@@ -116,7 +115,6 @@ require additional parameters (ha_crm_parameter) in order to function correctly.
 * __target_role:__ What state should the cluster attempt to keep this resource in?
 * __is_managed:__ Is the cluster allowed to start and stop the resource?
 * __resource_stickiness:__ How much does the resource prefer to stay where it is?
-* __migration_threshold:__ How many failures should occur for this resource on a node
-                           before making the node ineligible to host this resource.
+* __migration_threshold:__ How many failures should occur for this resource on a node before making the node ineligible to host this resource.
 *__failure_timeout:__ How many seconds to wait before acting as if the failure had not occurred
 *__multiple_active:__ What should the cluster do if it ever finds the resource active on more than one node
