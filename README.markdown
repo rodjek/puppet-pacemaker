@@ -116,5 +116,5 @@ require additional parameters (ha_crm_parameter) in order to function correctly.
 * __is_managed:__ Is the cluster allowed to start and stop the resource?
 * __resource_stickiness:__ How much does the resource prefer to stay where it is?
 * __migration_threshold:__ How many failures should occur for this resource on a node before making the node ineligible to host this resource.
-*__failure_timeout:__ How many seconds to wait before acting as if the failure had not occurred
-*__multiple_active:__ What should the cluster do if it ever finds the resource active on more than one node
+* __failure_timeout:__ How many seconds to wait before acting as if the failure had not occurred
+* __multiple_active:__ What should the cluster do if it ever finds the resource active on more than one node
