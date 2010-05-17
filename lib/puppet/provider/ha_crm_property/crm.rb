@@ -17,7 +17,7 @@ Puppet::Type.type(:ha_crm_property).provide(:crm) do
 			resource[:value]
 		else
 			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			property = REXML::XPath(cib, "/cib/configuration/crm_config/cluster_property_set/nvpair[@name='#{resource[:name]}']")
+			property = REXML::XPath.first(cib, "/cib/configuration/crm_config/cluster_property_set/nvpair[@name='#{resource[:name]}']")
 			if property.nil?
 				:absent
 			else
