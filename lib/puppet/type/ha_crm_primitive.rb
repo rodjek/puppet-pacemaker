@@ -3,12 +3,12 @@ Puppet::Type.newtype(:ha_crm_primitive) do
 	#
 	# * Set the default ensure value to true
 
-	@doc = "Manage Pacemaker primitives"
+	@doc = "Manage Pacemaker primitives (cluster resources)"
 
 	ensurable
 
 	newparam(:type) do
-		desc "The name of the Resource Agent you with to use. eg. IPAddr or Filesystem"
+		desc "The name of the Resource Agent you with to use. eg ocf:heartbeat:IPaddr"
 	end
 
 	newparam(:id) do
