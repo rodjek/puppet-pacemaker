@@ -89,7 +89,7 @@ Puppet::Type.newtype(:ha_crm_ms) do
     defaultto :absent
   end
 
-  newproperty(:interleaved) do
+  newproperty(:interleave) do
     desc "Changes the behavior of ordering constraints (between clones/masters)
           so that instances can start/stop as soon as their peer instance has
           (rather than waiting for every instance of the other clone has).  If

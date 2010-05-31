@@ -200,12 +200,12 @@ Puppet::Type.type(:ha_crm_ms).provide(:crm) do
     end
   end
 
-  def interleaved
+  def interleave
     if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
-      resource[:interleaved]
+      resource[:interleave]
     else
       cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-      nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/master[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='interleaved']")
+      nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/master[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='interleave']")
       if nvpair.nil?
         :absent
       else
@@ -214,11 +214,11 @@ Puppet::Type.type(:ha_crm_ms).provide(:crm) do
     end
   end
 
-  def interleaved=(value)
+  def interleave=(value)
     if value == :absent
-      crm_resource "-m", "-r", resource[:id], "-d", "interleaved"
+      crm_resource "-m", "-r", resource[:id], "-d", "interleave"
     else
-      crm_resource "-m", "-r", resource[:id], "-p", "interleaved", "-v", value.to_s
+      crm_resource "-m", "-r", resource[:id], "-p", "interleave", "-v", value.to_s
     end
   end
 
