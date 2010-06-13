@@ -81,7 +81,7 @@
 
   <ol class='man-decor man-head man head'>
     <li class='tl'>ha_crm_property(5)</li>
-    <li class='tc'></li>
+    <li class='tc'>puppet-ha</li>
     <li class='tr'>ha_crm_property(5)</li>
   </ol>
 
@@ -105,25 +105,24 @@ cluster options via your Puppet manifest.</p>
 
 <h2 id="REQUIRED-PARAMETERS">REQUIRED PARAMETERS</h2>
 
-<ul>
-<li><code>namevar</code>:
-The name of the property that you wish to adjust.</li>
-<li><code>value</code>:
-The value that you wish to assign to the property.</li>
-<li><code>ensure</code>:
-The existential state that this property should be in.
-Allowed values:
+<dl>
+<dt><code>name var</code></dt><dd><p>The name of the cluster property that you wish to adjust.</p>
 
-<ul>
-<li><code>absent</code></li>
-<li><code>present</code></li>
-</ul>
-</li>
-<li><code>only_run_on_dc</code>:
-Should we only attempt to change the value of this property if we're
+<p>Allowed values: <code>.*</code></p></dd>
+<dt class="flush"><code>value</code></dt><dd><p>The value that you wish to assign to the cluster property.</p>
+
+<p>Allowed values: <code>.*</code></p></dd>
+<dt class="flush"><code>ensure</code></dt><dd><p>The existential state that this property should be in.</p>
+
+<p>Allowed values: <code>absent</code>, <code>present</code></p></dd>
+<dt><code>only_run_on_dc</code></dt><dd><p>Should we only attempt to change the value of this property if we're
 the cluster DC (Designated Controller).  In general, you'll want to leave
-this at it's default value <code>true</code></li>
-</ul>
+this at it's default value <code>true</code></p>
+
+<p>Allowed values: <code>true</code>, <code>false</code></p>
+
+<p>Default value: <code>true</code></p></dd>
+</dl>
 
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
@@ -136,7 +135,7 @@ this at it's default value <code>true</code></li>
 }
 </code></pre>
 
-<p>Unmanage all the resources</p>
+<p>Unmanage all the resources:</p>
 
 <pre><code>ha_crm_property { "is-managed-default":
     value  =&gt; "false",
@@ -146,15 +145,15 @@ this at it's default value <code>true</code></li>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#116;&#x69;&#x6d;&#64;&#x73;&#x68;&#x61;&#114;&#x70;&#101;&#46;&#x69;&#100;&#x2e;&#97;&#117;" data-bare-link="true">&#x74;&#x69;&#x6d;&#x40;&#x73;&#104;&#97;&#x72;&#x70;&#x65;&#x2e;&#x69;&#x64;&#46;&#x61;&#x75;</a></p>
+<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x74;&#105;&#x6d;&#x40;&#x73;&#104;&#97;&#114;&#112;&#x65;&#46;&#x69;&#x64;&#46;&#97;&#117;" data-bare-link="true">&#116;&#x69;&#109;&#64;&#115;&#104;&#97;&#x72;&#x70;&#101;&#x2e;&#105;&#100;&#46;&#x61;&#117;</a></p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p>ha_crm_primitive(5)</p>
+<p><a href="http://bombasticmonkey.com/puppet-ha/ha_crm_primitive.5">ha_crm_primitive(5)</a></p>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'></li>
+    <li class='tl'>v0.1</li>
     <li class='tc'>June 2010</li>
     <li class='tr'>ha_crm_property(5)</li>
   </ol>
