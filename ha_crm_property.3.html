@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.5.93 (http://github.com/rtomayko/ronn)'>
+  <title>ha_crm_property(3) - Set a cluster-wide (crm_config) property</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage                        {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,  .mp pre,
+  .mp ul, .mp ol, .mp dl              {margin:0 0 20px 0}
+  .mp h2                              {margin:10px 0 0 0}
+  .mp > p, .mp > pre, .mp > ul,
+  .mp > ol, .mp > dl                  {margin-left:8ex}
+  .mp h3                              {margin:0 0 0 4ex}
+  .mp dt                              {margin:0;clear:left}
+  .mp dt.flush                        {float:left;width:8ex}
+  .mp dd                              {margin:0 0 0 9ex}
+  .mp h1, .mp h2, .mp h3, .mp h4      {clear:left}
+  .mp pre                             {margin-bottom:20px}
+  .mp pre+h2, .mp pre+h3              {margin-top:22px}
+  .mp h2+pre, .mp h3+pre              {margin-top:5px}
+  .mp img                             {display:block;margin:auto}
+  .mp h1.man-title                    {display:none}
+  .mp, .mp code, .mp pre, .mp tt,
+  .mp kbd, .mp samp, .mp h3, .mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp, .mp code, .mp pre,
+  .mp pre code, .mp tt, .mp kbd,
+  .mp samp                            {color:#131211}
+  .mp h1, .mp h2, .mp h3, .mp h4      {color:#030201}
+  .mp ol.man, .mp ol.man li           {color:#636261}
+  .mp code, .mp strong, .mp b {font-weight:bold;color:#131211}
+  .mp em, .mp var, .mp u {font-style:italic;color:#434241;text-decoration:none}
+  .mp pre {background:#edeceb;padding:5px 1ex;border-left:1ex solid #ddd}
+  .mp pre code {font-weight:normal;background:inherit}
+  .mp a, .mp a:link, .mp a:hover,
+  .mp a code, .mp a pre, .mp a tt,
+  .mp a kbd, .mp a samp              {color:#0000ff}
+  ol.man-decor, ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor                  {width:100%}
+  ol.man-decor li.tl            {text-align:left}
+  ol.man-decor li.tc            {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr            {text-align:right;float:right}
+  </style>
+  <style type='text/css' media='all'>
+  /* style: toc */
+  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;
+      height:100%;width:100%;padding:48px 0 0 0;border-left:2px solid #222;background-color:#131211}
+  .man-navigation a,
+  .man-navigation a:hover,
+  .man-navigation a:link,
+  .man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 25px;color:#777;text-decoration:none}
+  .man-navigation a:hover {color:#fff;text-decoration:underline}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#REQUIRED-PARAMETERS">REQUIRED PARAMETERS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+    </div>
+
+  <h1 class='man-title'>ha_crm_property(3)</h1>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>ha_crm_property(3)</li>
+    <li class='tc'>puppet-ha</li>
+    <li class='tr'>ha_crm_property(3)</li>
+  </ol>
+
+  <h2 id='NAME'>NAME</h2>
+<p><code>ha_crm_property</code> - Set a cluster-wide (crm_config) property</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<pre><code>ha_crm_property { "&lt;property name>":
+    value          =&gt; "&lt;value>",
+    ensure         =&gt; "(present|absent)",
+    only_run_on_dc =&gt; "(true|false)",
+}
+</code></pre>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>Cluster options, as you'd expect, control how the cluster behaves when
+confronted with certain situations.  This type allows you to manage the
+cluster options via your Puppet manifest.</p>
+
+<h2 id="REQUIRED-PARAMETERS">REQUIRED PARAMETERS</h2>
+
+<dl>
+<dt><code>name var</code></dt><dd><p>The name of the cluster property that you wish to adjust.</p>
+
+<p>Allowed values: <code>.*</code></p></dd>
+<dt class="flush"><code>value</code></dt><dd><p>The value that you wish to assign to the cluster property.</p>
+
+<p>Allowed values: <code>.*</code></p></dd>
+<dt class="flush"><code>ensure</code></dt><dd><p>The existential state that this property should be in.</p>
+
+<p>Allowed values: <code>absent</code>, <code>present</code></p></dd>
+<dt><code>only_run_on_dc</code></dt><dd><p>Should we only attempt to change the value of this property if we're
+the cluster DC (Designated Controller).  In general, you'll want to leave
+this at it's default value <code>true</code></p>
+
+<p>Allowed values: <code>true</code>, <code>false</code></p>
+
+<p>Default value: <code>true</code></p></dd>
+</dl>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Enable STONITH:</p>
+
+<pre><code>ha_crm_property { "stonith-enabled":
+    value  =&gt; "true",
+    ensure =&gt; present,
+}
+</code></pre>
+
+<p>Unmanage all the resources:</p>
+
+<pre><code>ha_crm_property { "is-managed-default":
+    value  =&gt; "false",
+    ensure =&gt; present,
+}
+</code></pre>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#116;&#x69;&#109;&#64;&#115;&#x68;&#x61;&#x72;&#112;&#101;&#x2e;&#105;&#100;&#46;&#97;&#117;" data-bare-link="true">&#x74;&#105;&#109;&#64;&#115;&#x68;&#x61;&#x72;&#112;&#x65;&#46;&#105;&#100;&#x2e;&#x61;&#x75;</a></p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><a href="http://bombasticmonkey.com/puppet-ha/ha_crm_primitive.3">ha_crm_primitive(3)</a></p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>v0.1</li>
+    <li class='tc'>June 2010</li>
+    <li class='tr'>ha_crm_property(3)</li>
+  </ol>
+
+  </div>
+</body>
+</html>
