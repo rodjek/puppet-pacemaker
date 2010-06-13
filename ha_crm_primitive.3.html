@@ -115,9 +115,15 @@ manifest.</p>
 <h2 id="REQUIRED-PARAMETERS">REQUIRED PARAMETERS</h2>
 
 <dl>
-<dt><code>name var</code></dt><dd>The name of the primitive (used as a reference for most other ha:: types)</dd>
-<dt class="flush"><code>type</code></dt><dd>The primitive class (almost always will start with ocf: or lsb:)</dd>
-<dt class="flush"><code>ensure</code></dt><dd>Whether this primitive should exist in the CIB</dd>
+<dt><code>name var</code></dt><dd><p>The name of the primitive (used as a reference for most other ha:: types)</p>
+
+<p>Allowed values: <code>.+</code></p></dd>
+<dt class="flush"><code>type</code></dt><dd><p>The primitive class (almost always will start with ocf: or lsb:)</p>
+
+<p>Allowed values: <code>.+</code></p></dd>
+<dt class="flush"><code>ensure</code></dt><dd><p>Whether this primitive should exist in the CIB</p>
+
+<p>Allowed values: <code>absent</code>, <code>present</code></p></dd>
 </dl>
 
 
@@ -187,11 +193,11 @@ manifest.</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x74;&#x69;&#109;&#x40;&#x73;&#104;&#97;&#x72;&#x70;&#101;&#x2e;&#105;&#x64;&#x2e;&#97;&#x75;" data-bare-link="true">&#x74;&#x69;&#109;&#64;&#115;&#x68;&#97;&#114;&#x70;&#x65;&#46;&#x69;&#100;&#x2e;&#x61;&#x75;</a></p>
+<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x74;&#x69;&#x6d;&#x40;&#x73;&#x68;&#97;&#114;&#x70;&#x65;&#46;&#x69;&#100;&#46;&#97;&#117;" data-bare-link="true">&#116;&#105;&#109;&#x40;&#115;&#104;&#x61;&#114;&#112;&#101;&#x2e;&#x69;&#x64;&#x2e;&#97;&#117;</a></p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><a href="http://bombasticmonkey.com/puppet-ha/ha_crm_primitive.3">ha_crm_property(3)</a></p>
+<p><a href="http://bombasticmonkey.com/puppet-ha/ha_crm_property.3">ha_crm_property(3)</a></p>
 
 
   <ol class='man-decor man-foot man foot'>
