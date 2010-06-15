@@ -47,13 +47,14 @@
   ol.man-decor li.tr            {text-align:right;float:right}
   </style>
   <style type='text/css' media='all'>
-  /* style: darktoc */
-  .man-navigation {border-left:2px solid #222;background-color:#131211}
+  /* style: toc */
+  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;
+      height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
   .man-navigation a,
   .man-navigation a:hover,
   .man-navigation a:link,
-  .man-navigation a:visited {color:#777;text-decoration:none}
-  .man-navigation a:hover {color:#fff;text-decoration:underline}
+  .man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
+  .man-navigation a:hover {color:#111;text-decoration:underline}
   </style>
 </head>
 <!--
@@ -140,13 +141,15 @@
         resource      =&gt; "mysql-ip",
         with_resource =&gt; "mysql-server",
         score         =&gt; "inf",
-        require       =&gt; [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+        require       =&gt; [Ha_crm_primitive["mysql-server"], 
+                          Ha_crm_primitive["mysql-ip"]],
     }
 
     ha_crm_order { "mysql-server_then_mysql-ip":
         first   =&gt; "mysql-server",
         then    =&gt; "mysql-ip",
-        require =&gt; [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+        require =&gt; [Ha_crm_primitive["mysql-server"], 
+                    Ha_crm_primitive["mysql-ip"]],
     }
 }
 </code></pre>
@@ -175,7 +178,7 @@ without having to worry about duplicate configurations.</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>This Puppet HA model is Copyright (C) 2010 Tim Sharpe <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#116;&#x69;&#109;&#64;&#115;&#104;&#97;&#x72;&#x70;&#101;&#46;&#105;&#x64;&#46;&#97;&#x75;" data-bare-link="true">&#x74;&#x69;&#109;&#x40;&#115;&#x68;&#x61;&#x72;&#112;&#101;&#x2e;&#x69;&#100;&#x2e;&#97;&#x75;</a></p>
+<p>This Puppet HA model is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#116;&#x69;&#x6d;&#x40;&#115;&#104;&#97;&#114;&#x70;&#x65;&#x2e;&#105;&#100;&#46;&#x61;&#117;" data-bare-link="true">&#116;&#105;&#x6d;&#64;&#115;&#x68;&#x61;&#x72;&#112;&#101;&#46;&#105;&#x64;&#46;&#97;&#x75;</a></p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 

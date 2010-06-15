@@ -46,13 +46,15 @@ mysql_ha.pp
             resource      => "mysql-ip",
             with_resource => "mysql-server",
             score         => "inf",
-            require       => [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+            require       => [Ha_crm_primitive["mysql-server"], 
+                              Ha_crm_primitive["mysql-ip"]],
         }
 
         ha_crm_order { "mysql-server_then_mysql-ip":
             first   => "mysql-server",
             then    => "mysql-ip",
-            require => [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+            require => [Ha_crm_primitive["mysql-server"], 
+                        Ha_crm_primitive["mysql-ip"]],
         }
     }
 
