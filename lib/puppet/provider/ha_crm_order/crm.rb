@@ -17,7 +17,7 @@ Puppet::Type.type(:ha_crm_colocation).provide(:crm) do
       then_rsc = resource[:then]
     end
 
-		crm "-F", "configure", "order", resource[:id], "#{resource[:score]}:", first, then, "symmetrical=#{resource[:symmetrical].to_s}"
+		crm "-F", "configure", "order", resource[:id], "#{resource[:score]}:", first_rsc, then_rsc, "symmetrical=#{resource[:symmetrical].to_s}"
 	end
 
 	def destroy
