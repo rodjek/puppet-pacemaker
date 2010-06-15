@@ -1,0 +1,24 @@
+puppet_ha(3) - A Puppet module for complete management of the Linux-HA stack
+============================================================================
+
+## BUGS
+
+  * Does not manage resource operations (eg "op monitor <foo>")
+
+## CONTRIBUTING
+
+  * Fork the project on [GitHub](http://github.com/rodjek/puppet-ha).
+  * Make your feature addition or bug fix.
+  * Add tests for it.
+  * Commit, but do not mess with the Rakefile, version or history
+  * Send me a pull request
+
+## COPYRIGHT
+
+This Puppet HA model is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
+
+## SEE ALSO
+
+[ha_crm_primitive.3](/puppet-ha/ha_crm_primitive.3),
+[ha_crm_property.3](/puppet-ha/ha_crm_property.3)
+
