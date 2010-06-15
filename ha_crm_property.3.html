@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
-  <meta name='generator' value='Ronn/v0.5.93 (http://github.com/rtomayko/ronn)'>
+  <meta name='generator' value='Ronn/v0.6.6 (http://github.com/rtomayko/ronn)'>
   <title>ha_crm_property(3) - Set a cluster-wide (crm_config) property</title>
   <style type='text/css' media='all'>
   /* style: man */
@@ -49,12 +49,12 @@
   <style type='text/css' media='all'>
   /* style: toc */
   .man-navigation {display:block !important;position:fixed;top:0;left:113ex;
-      height:100%;width:100%;padding:48px 0 0 0;border-left:2px solid #222;background-color:#131211}
+      height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
   .man-navigation a,
   .man-navigation a:hover,
   .man-navigation a:link,
-  .man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 25px;color:#777;text-decoration:none}
-  .man-navigation a:hover {color:#fff;text-decoration:underline}
+  .man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
+  .man-navigation a:hover {color:#111;text-decoration:underline}
   </style>
 </head>
 <!--
@@ -72,6 +72,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#REQUIRED-PARAMETERS">REQUIRED PARAMETERS</a>
+    <a href="#OPTIONAL-PARAMETERS">OPTIONAL PARAMETERS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
@@ -81,7 +82,7 @@
 
   <ol class='man-decor man-head man head'>
     <li class='tl'>ha_crm_property(3)</li>
-    <li class='tc'>puppet-ha</li>
+    <li class='tc'></li>
     <li class='tr'>ha_crm_property(3)</li>
   </ol>
 
@@ -115,6 +116,12 @@ cluster options via your Puppet manifest.</p>
 <dt class="flush"><code>ensure</code></dt><dd><p>The existential state that this property should be in.</p>
 
 <p>Allowed values: <code>absent</code>, <code>present</code></p></dd>
+</dl>
+
+
+<h2 id="OPTIONAL-PARAMETERS">OPTIONAL PARAMETERS</h2>
+
+<dl>
 <dt><code>only_run_on_dc</code></dt><dd><p>Should we only attempt to change the value of this property if we're
 the cluster DC (Designated Controller).  In general, you'll want to leave
 this at it's default value <code>true</code></p>
@@ -145,15 +152,17 @@ this at it's default value <code>true</code></p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#116;&#x69;&#x6d;&#x40;&#x73;&#x68;&#x61;&#x72;&#112;&#x65;&#46;&#x69;&#x64;&#46;&#97;&#117;" data-bare-link="true">&#116;&#105;&#x6d;&#64;&#x73;&#x68;&#97;&#x72;&#x70;&#x65;&#x2e;&#x69;&#100;&#x2e;&#97;&#117;</a></p>
+<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x74;&#105;&#x6d;&#64;&#x73;&#x68;&#97;&#x72;&#112;&#101;&#46;&#x69;&#100;&#46;&#97;&#x75;" data-bare-link="true">&#116;&#x69;&#109;&#64;&#x73;&#x68;&#97;&#x72;&#112;&#x65;&#46;&#105;&#x64;&#46;&#x61;&#x75;</a></p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><a href="http://bombasticmonkey.com/puppet-ha/ha_crm_primitive.3">ha_crm_primitive(3)</a></p>
+<p><a href="/puppet-ha/puppet_ha.3">puppet_ha(3)</a>,
+<a href="/puppet-ha/ha_crm_primitive.3">ha_crm_primitive(3)</a>
+<a href="/puppet-ha/ha_crm_parameter.3">ha_crm_parameter(3)</a></p>
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>v0.1</li>
+    <li class='tl'></li>
     <li class='tc'>June 2010</li>
     <li class='tr'>ha_crm_property(3)</li>
   </ol>
