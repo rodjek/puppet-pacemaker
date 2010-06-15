@@ -72,6 +72,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#REQUIRED-PARAMETERS">REQUIRED PARAMETERS</a>
+    <a href="#OPTIONAL-PARAMETERS">OPTIONAL PARAMETERS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
@@ -119,14 +120,20 @@ they control.</p>
 <dt class="flush"><code>value</code></dt><dd><p>The value that you wish to assign to the parameter.</p>
 
 <p>Allowed values: <code>.*</code></p></dd>
+<dt class="flush"><code>ensure</code></dt><dd><p>The existential state that this parameter should be in.</p>
+
+<p>Allowed values: <code>absent</code>, <code>present</code></p></dd>
+</dl>
+
+
+<h2 id="OPTIONAL-PARAMETERS">OPTIONAL PARAMETERS</h2>
+
+<dl>
 <dt class="flush"><code>meta</code></dt><dd><p>Is this a meta parameter?</p>
 
 <p>Allowed values: <code>true</code>, <code>false</code></p>
 
 <p>Default value: <code>true</code></p></dd>
-<dt class="flush"><code>ensure</code></dt><dd><p>The existential state that this parameter should be in.</p>
-
-<p>Allowed values: <code>absent</code>, <code>present</code></p></dd>
 <dt><code>only_run_on_dc</code></dt><dd><p>Should we only attempt to change the value of this property if we're
 the cluster DC (Designated Controller).  In general, you'll want to leave
 this at it's default value <code>true</code></p>
@@ -162,7 +169,7 @@ this at it's default value <code>true</code></p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x74;&#x69;&#109;&#x40;&#115;&#x68;&#x61;&#114;&#x70;&#101;&#x2e;&#x69;&#x64;&#46;&#97;&#117;" data-bare-link="true">&#116;&#105;&#x6d;&#x40;&#115;&#x68;&#x61;&#x72;&#112;&#x65;&#x2e;&#105;&#x64;&#46;&#97;&#117;</a></p>
+<p>This Puppet HA module is Copyright (C) 2010 Tim Sharpe <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x74;&#x69;&#109;&#x40;&#115;&#104;&#97;&#x72;&#x70;&#101;&#x2e;&#x69;&#100;&#x2e;&#x61;&#117;" data-bare-link="true">&#x74;&#x69;&#x6d;&#x40;&#x73;&#104;&#97;&#114;&#x70;&#x65;&#x2e;&#105;&#x64;&#x2e;&#97;&#117;</a></p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
