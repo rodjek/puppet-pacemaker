@@ -1,6 +1,14 @@
 puppet_ha(3) - A Puppet module for complete management of the Linux-HA stack
 ============================================================================
 
+## INSTALL
+
+Download and extract into your Puppet modules directory 
+(eg `/etc/puppet/modules').
+
+  * [Tarball (latest)](http://github.com/rodjek/puppet-ha/tarball/master)
+  * [Zipball (latest)](http://github.com/rodjek/puppet-ha/zipball/master)
+
 ## BUGS
 
   * Does not manage resource operations (eg "op monitor <foo>")
@@ -19,6 +27,6 @@ This Puppet HA model is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
 
 ## SEE ALSO
 
-[ha_crm_primitive.3](/puppet-ha/ha_crm_primitive.3),
-[ha_crm_property.3](/puppet-ha/ha_crm_property.3)
+[ha_crm_primitive(3)](/puppet-ha/ha_crm_primitive.3),
+[ha_crm_property(3)](/puppet-ha/ha_crm_property.3)
 
