@@ -4,7 +4,7 @@ puppet_ha(3) - A Puppet module for complete management of the Linux-HA stack
 ## INSTALL
 
 Download and extract into your Puppet modules directory 
-(eg `/etc/puppet/modules').
+(eg `/etc/puppet/modules/`).
 
   * [Tarball (latest)](http://github.com/rodjek/puppet-ha/tarball/master)
   * [Zipball (latest)](http://github.com/rodjek/puppet-ha/zipball/master)
