@@ -58,4 +58,5 @@ This Puppet HA module is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
 
 ## SEE ALSO
 
-[ha_crm_primitive(3)](http://bombasticmonkey.com/puppet-ha/ha_crm_primitive.3)
+[puppet_ha(3)](/puppet-ha/puppet_ha.3),
+[ha_crm_primitive(3)](/puppet-ha/ha_crm_primitive.3)
