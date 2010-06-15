@@ -1,0 +1,114 @@
+ha_crm_primitive(3) - Manage cluster primitives (resources)
+===========================================================
+
+## SYNOPSIS
+
+    ha_crm_primitive { "<primitive name>":
+        type                => "<class>:<provider>:<type>"
+        ensure              => "(present|absent)",
+        only_run_on_dc      => "(true|false)",
+        priority            => "<integer>",
+        target_role         => "(stopped|started|master)",
+        is_managed          => "(true|false)",
+        resource_stickiness => "<integer>",
+        migration_threshold => "<integer>",
+        failure_timeout     => "<integer>",
+        multiple_active     => "(block|stop_only|stop_start)",
+    }
+
+## DESCRIPTION
+
+A cluster primitive or resource is anything that is managed by the cluster,
+from a service such as MySQL, to a filesystem mount, to a floating IP 
+address.  This type allows you to define these resources inside your Puppet
+manifest.
+
+## REQUIRED PARAMETERS
+
+  * `name var`: 
+    The name of the primitive (used as a reference for most other ha:: types)
+
+    Allowed values: `.+`
+
+  * `type`: 
+    The primitive class (almost always will start with ocf: or lsb:)
+
+    Allowed values: `.+`
+
+  * `ensure`: 
+    Whether this primitive should exist in the CIB
+
+    Allowed values: `absent`, `present`
+
+## OPTIONAL PARAMETERS
+
+  * `only_run_on_dc`: 
+    Should Puppet only attempt to manage this resource if the node is the cluster DC
+
+    Allowed values: `true`, `false`
+
+    Default value: `true`
+  * `priority`: 
+    The priority of the resource
+
+    Allowed values: `\d+`
+
+    Default value: 0
+  * `target_role`: 
+    What state should the cluster attempt to keep this resource in?
+
+    Allowed values: `started`, `stopped`, `master`
+
+    Default value: `started`
+  * `is_managed`: 
+    Is the cluster allowed to start and stop the resource?
+
+    Allowed values: `true`, `false`
+
+    Default value: `true`
+  * `resource_stickiness`: 
+    How much does the resource prefer to stay where it is?
+
+    Allowed values: `\d+`
+
+    Default value: `inherited from default-resource-stickiness property`
+  * `migration_threshold`: 
+    How many failures should occur for this resource on a node before making the node ineligible to host this resource.
+
+    Allowed values: `\d+`
+
+    Default value: `0`
+  * `failure_timeout`: 
+    How many seconds to wait before acting as if the failure had not occurred
+
+    Allowed values: `\d+`
+
+    Default value: `0`
+  * `multiple_active`: 
+    What should the cluster do if it ever finds the resource active on more than one node
+
+    Allowed values: `block`, `stop_only`, `stop_start`
+
+    Default value: `stop_start`
+
+## EXAMPLES
+
+A MySQL server:
+    ha_crm_primitive { "mysql-server":
+        type   => "lsb:mysqld",
+        ensure => present,
+    }
+
+A filesystem mount:
+    ha_crm_primitve { "fs_mysql":
+        type   => "ocf:heartbeat:Filesystem",
+        ensure => present,
+    }
+
+## COPYRIGHT
+
+This Puppet HA module is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
+
+## SEE ALSO
+
+[ha_crm_property(3)](http://bombasticmonkey.com/puppet-ha/ha_crm_property.3)

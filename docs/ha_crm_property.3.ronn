@@ -1,0 +1,61 @@
+ha_crm_property(3) - Set a cluster-wide (crm_config) property
+=============================================================
+
+## SYNOPSIS
+
+    ha_crm_property { "<property name>":
+        value          => "<value>",
+        ensure         => "(present|absent)",
+        only_run_on_dc => "(true|false)",
+    }
+
+## DESCRIPTION
+
+Cluster options, as you'd expect, control how the cluster behaves when 
+confronted with certain situations.  This type allows you to manage the
+cluster options via your Puppet manifest.
+
+## REQUIRED PARAMETERS
+
+  * `name var`:
+    The name of the cluster property that you wish to adjust.
+
+    Allowed values: `.*`
+  * `value`:
+    The value that you wish to assign to the cluster property.
+
+    Allowed values: `.*`
+  * `ensure`:
+    The existential state that this property should be in.
+
+    Allowed values: `absent`, `present`
+  * `only_run_on_dc`:
+    Should we only attempt to change the value of this property if we're
+    the cluster DC (Designated Controller).  In general, you'll want to leave
+    this at it's default value `true`
+
+    Allowed values: `true`, `false`
+
+    Default value: `true`
+
+## EXAMPLES
+
+Enable STONITH:
+    ha_crm_property { "stonith-enabled":
+        value  => "true",
+        ensure => present,
+    }
+
+Unmanage all the resources:
+    ha_crm_property { "is-managed-default":
+        value  => "false",
+        ensure => present,
+    }
+
+## COPYRIGHT
+
+This Puppet HA module is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
+
+## SEE ALSO
+
+[ha_crm_primitive(3)](http://bombasticmonkey.com/puppet-ha/ha_crm_primitive.3)
