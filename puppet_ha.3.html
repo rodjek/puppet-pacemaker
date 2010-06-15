@@ -47,14 +47,13 @@
   ol.man-decor li.tr            {text-align:right;float:right}
   </style>
   <style type='text/css' media='all'>
-  /* style: toc */
-  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;
-      height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
+  /* style: darktoc */
+  .man-navigation {border-left:2px solid #222;background-color:#131211}
   .man-navigation a,
   .man-navigation a:hover,
   .man-navigation a:link,
-  .man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
-  .man-navigation a:hover {color:#111;text-decoration:underline}
+  .man-navigation a:visited {color:#777;text-decoration:none}
+  .man-navigation a:hover {color:#fff;text-decoration:underline}
   </style>
 </head>
 <!--
@@ -70,6 +69,7 @@
   <div class='man-navigation' style='display:none'>
     <a href="#NAME">NAME</a>
     <a href="#INSTALL">INSTALL</a>
+    <a href="#EXAMPLE-USAGE">EXAMPLE USAGE</a>
     <a href="#BUGS">BUGS</a>
     <a href="#CONTRIBUTING">CONTRIBUTING</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
@@ -90,13 +90,70 @@
 <h2 id="INSTALL">INSTALL</h2>
 
 <p>Download and extract into your Puppet modules directory
-(eg `/etc/puppet/modules').</p>
+(eg <code>/etc/puppet/modules/</code>).</p>
 
 <ul>
 <li><a href="http://github.com/rodjek/puppet-ha/tarball/master">Tarball (latest)</a></li>
 <li><a href="http://github.com/rodjek/puppet-ha/zipball/master">Zipball (latest)</a></li>
 </ul>
 
+
+<h2 id="EXAMPLE-USAGE">EXAMPLE USAGE</h2>
+
+<p>node1.pp</p>
+
+<pre><code>node node1 {
+    include mysql_ha
+    ...
+}
+</code></pre>
+
+<p>node2.pp</p>
+
+<pre><code>node node2 {
+    include mysql_ha
+    ...
+}
+</code></pre>
+
+<p>mysql_ha.pp</p>
+
+<pre><code>class mysql_ha {
+    ha_crm_primitive { 
+        "mysql-server":
+            type   =&gt; "lsb:mysql",
+            ensure =&gt; present;
+        "mysql-ip":
+            type   =&gt; "ocf:heartbeat:IPaddr2"
+            ensure =&gt; present;
+    }
+
+    ha_crm_parameter { "mysql-ip_ip":
+        resource =&gt; "mysql-ip",
+        name     =&gt; "ip",
+        value    =&gt; "192.168.0.100",
+        ensure   =&gt; present,
+        require  =&gt; Ha_crm_primitive["mysql-ip"],
+    }
+
+    ha_crm_colocation { "mysql-ip_with_mysql-server":
+        resource      =&gt; "mysql-ip",
+        with_resource =&gt; "mysql-server",
+        score         =&gt; "inf",
+        require       =&gt; [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+    }
+
+    ha_crm_order { "mysql-server_then_mysql-ip":
+        first   =&gt; "mysql-server",
+        then    =&gt; "mysql-ip",
+        require =&gt; [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+    }
+}
+</code></pre>
+
+<p>By leaving <code>only_run_on_dc</code> set to <code>true</code> on all the resources, we can put all
+our HA configuration into a common class that gets included on all our HA nodes
+without having to worry about duplicate configurations.</p>
 
 <h2 id="BUGS">BUGS</h2>
 
@@ -118,7 +175,7 @@
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
-<p>This Puppet HA model is Copyright (C) 2010 Tim Sharpe <a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#x74;&#x69;&#109;&#x40;&#x73;&#x68;&#97;&#114;&#112;&#x65;&#x2e;&#105;&#100;&#x2e;&#x61;&#117;" data-bare-link="true">&#116;&#105;&#x6d;&#x40;&#115;&#104;&#x61;&#114;&#112;&#101;&#46;&#x69;&#x64;&#46;&#97;&#x75;</a></p>
+<p>This Puppet HA model is Copyright (C) 2010 Tim Sharpe <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#116;&#x69;&#109;&#64;&#115;&#104;&#97;&#x72;&#x70;&#101;&#46;&#105;&#x64;&#46;&#97;&#x75;" data-bare-link="true">&#x74;&#x69;&#109;&#x40;&#115;&#x68;&#x61;&#x72;&#112;&#101;&#x2e;&#x69;&#100;&#x2e;&#97;&#x75;</a></p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 

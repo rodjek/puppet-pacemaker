@@ -9,6 +9,57 @@ Download and extract into your Puppet modules directory
   * [Tarball (latest)](http://github.com/rodjek/puppet-ha/tarball/master)
   * [Zipball (latest)](http://github.com/rodjek/puppet-ha/zipball/master)
 
+## EXAMPLE USAGE
+
+node1.pp
+    node node1 {
+        include mysql_ha
+        ...
+    }
+
+node2.pp
+    node node2 {
+        include mysql_ha
+        ...
+    }
+
+mysql_ha.pp
+    class mysql_ha {
+        ha_crm_primitive { 
+            "mysql-server":
+                type   => "lsb:mysql",
+                ensure => present;
+            "mysql-ip":
+                type   => "ocf:heartbeat:IPaddr2"
+                ensure => present;
+        }
+
+        ha_crm_parameter { "mysql-ip_ip":
+            resource => "mysql-ip",
+            name     => "ip",
+            value    => "192.168.0.100",
+            ensure   => present,
+            require  => Ha_crm_primitive["mysql-ip"],
+        }
+
+        ha_crm_colocation { "mysql-ip_with_mysql-server":
+            resource      => "mysql-ip",
+            with_resource => "mysql-server",
+            score         => "inf",
+            require       => [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+        }
+
+        ha_crm_order { "mysql-server_then_mysql-ip":
+            first   => "mysql-server",
+            then    => "mysql-ip",
+            require => [Ha_crm_primitive["mysql-server"], Ha_crm_primitive["mysql-ip"]],
+        }
+    }
+
+By leaving `only_run_on_dc` set to `true` on all the resources, we can put all
+our HA configuration into a common class that gets included on all our HA nodes
+without having to worry about duplicate configurations.
+
 ## BUGS
 
   * Does not manage resource operations (eg "op monitor <foo>")
