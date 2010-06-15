@@ -13,15 +13,15 @@ Puppet::Type.type(:ha_crm_property).provide(:crm) do
 	end
 
 	def exists?
-		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
-			resource[:value]
+		if (resource[:only_run_on_dc] == :true) and (Facter.value(:ha_cluster_dc) != Facter.value(:fqdn))
+			true
 		else
 			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
 			property = REXML::XPath.first(cib, "/cib/configuration/crm_config/cluster_property_set/nvpair[@name='#{resource[:name]}']")
 			if property.nil?
-				:absent
+				false
 			else
-				property.attribute(:value).value
+				property.attribute(:value).value == resource[:value] ? true : false
 			end
 		end
 	end
