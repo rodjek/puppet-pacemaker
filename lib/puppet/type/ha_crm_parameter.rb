@@ -20,10 +20,17 @@ Puppet::Type.newtype(:ha_crm_parameter) do
 		desc "The value of the parameter"
 	end
 
-	newparam(:meta, :boolean => true) do
+	newparam(:meta) do
 		desc "Should this parameter be a meta-parameter?"
 
 		newvalues(:true, :false)
 		defaultto :false
 	end
+
+  newparam(:only_run_on_dc) do
+    desc "Should this resource only be actioned if the node is the cluster DC?"
+
+    newvalues(:true, :false)
+    defaultto :true
+  end
 end
