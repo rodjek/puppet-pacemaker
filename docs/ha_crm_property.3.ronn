@@ -21,14 +21,19 @@ cluster options via your Puppet manifest.
     The name of the cluster property that you wish to adjust.
 
     Allowed values: `.*`
+
   * `value`:
     The value that you wish to assign to the cluster property.
 
     Allowed values: `.*`
+
   * `ensure`:
     The existential state that this property should be in.
 
     Allowed values: `absent`, `present`
+
+## OPTIONAL PARAMETERS
+
   * `only_run_on_dc`:
     Should we only attempt to change the value of this property if we're
     the cluster DC (Designated Controller).  In general, you'll want to leave
@@ -60,3 +65,4 @@ This Puppet HA module is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
 
 [puppet_ha(3)](/puppet-ha/puppet_ha.3),
 [ha_crm_primitive(3)](/puppet-ha/ha_crm_primitive.3)
+[ha_crm_parameter(3)](/puppet-ha/ha_crm_parameter.3)

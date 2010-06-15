@@ -1,0 +1,87 @@
+ha_crm_parameter(3) - Manage resource (meta-)?parmeters
+=======================================================
+
+## SYNOPSIS
+
+    ha_crm_parameter { "<unique string>":
+        resource       => "<resource name>",
+        name           => "<parameter name>",
+        value          => "<parameter value>",
+        meta           => "(true|false)",
+        ensure         => "(present|absent)",
+        only_run_on_dc => "(true|false)",
+    }
+
+## DESCRIPTION
+
+Some cluster resource types (non-LSB resources) can take additional 
+parameters which determine how they behave and which instance of a service
+they control.
+
+## REQUIRED PARAMETERS
+
+  * `name var`:
+    A throwaway value.  For sanity sake, I recommend using the format
+    `<resource name>_<parameter name>`.
+
+    Allowed values: `.*`
+
+  * `name`:
+    The name of the parameter that you wish to manage.
+
+    Allowed values: `.*`
+
+  * `value`:
+    The value that you wish to assign to the parameter.
+
+    Allowed values: `.*`
+
+  * `meta`:
+    Is this a meta parameter?
+
+    Allowed values: `true`, `false`
+
+    Default value: `true`
+
+  * `ensure`:
+    The existential state that this parameter should be in.
+
+    Allowed values: `absent`, `present`
+
+  * `only_run_on_dc`:
+    Should we only attempt to change the value of this property if we're
+    the cluster DC (Designated Controller).  In general, you'll want to leave
+    this at it's default value `true`
+
+    Allowed values: `true`, `false`
+
+    Default value: `true`
+
+## EXAMPLES
+
+Set the "ip" parameter on the "test-ip" resource:
+    ha_crm_parameter { "test-ip_ip":
+        resource => "test-ip",
+        name     => "ip",
+        value    => "192.168.100.1",
+        ensure   => present,
+    }
+
+Set the "priority" metaparameter on the "test-ip" resource:
+    ha_crm_parameter { "test-ip_priority":
+        resource => "test-ip",
+        name     => "priority",
+        value    => "1000",
+        meta     => true,
+        ensure   => present,
+    }
+
+## COPYRIGHT
+
+This Puppet HA module is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
+
+## SEE ALSO
+
+[puppet_ha(3)](/puppet-ha/puppet_ha.3),
+[ha_crm_primitive(3)](/puppet-ha/ha_crm_primitive.3),
+[ha_crm_property(3)](/puppet-ha/ha_crm_property.3)
