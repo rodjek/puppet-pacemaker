@@ -14,7 +14,7 @@ Puppet::Type.newtype(:ha_crm_colocation) do
           cluster may decide not to allow the resource to be run at all."
 	end
 
-  newparam(:resource) do
+  newparam(:resource_role) do
     desc "An optional role for the colocation source"
   end
 
@@ -47,4 +47,5 @@ Puppet::Type.newtype(:ha_crm_colocation) do
     raise Puppet::Error, "You must specify a colocation source (resource)" unless @parameters.include?(:resource)
     raise Puppet::Error, "You must specify a colocation target (with_resource)" unless @parameters.include(:with_resource)
     raise Puppet::Error, "You must specify a score" unless @parameters.include?(:score)
+  end
 end
