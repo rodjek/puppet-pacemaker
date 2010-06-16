@@ -1,4 +1,4 @@
-puppet_ha(3) - A Puppet module for complete management of the Linux-HA stack
+puppet_pacemaker(3) - A Puppet module for management of HA cluster resources
 ============================================================================
 
 ## INSTALL
@@ -73,10 +73,6 @@ without having to worry about duplicate configurations.
   * Add tests for it.
   * Commit, but do not mess with the Rakefile, version or history
   * Send me a pull request
-
-## COPYRIGHT
-
-This Puppet HA model is Copyright (C) 2010 Tim Sharpe <tim@sharpe.id.au>
 
 ## SEE ALSO
 
