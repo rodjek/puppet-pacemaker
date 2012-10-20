@@ -1,4 +1,4 @@
-define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $ignore_dc="false"
+define ha::crm::primitive($resource_type, $ensure=present, $monitor_interval, $ignore_dc="false",
     $priority="", $target_role="", $is_managed="", $resource_stickiness="", $migration_threshold="",
     $failure_timeout="", $multiple_active="") {
 

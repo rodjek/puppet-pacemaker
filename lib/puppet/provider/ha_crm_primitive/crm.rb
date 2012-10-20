@@ -3,24 +3,40 @@ require 'rexml/document'
 Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 	desc "CRM shell support"
 
-	commands :crm => "crm"
-	commands :crm_resource => "crm_resource"
+	commands :crm => "crm", :crm_resource => "crm_resource"
 
-	def create
-		crm "-F", "configure", "primitive", resource[:id], resource[:type]
+  def ops
+    return resource[:ops]
+  end
+	
+  def create
+    if ops
+      a_ops=[]
+      ops.split(',').each do |this_op|
+        a_ops << "op #{this_op} "
+      end
+    end
+		crm "-F", "configure", "primitive", resource[:id], resource[:type], *a_ops
 	end
 
 	def destroy
-		crm "-F", "configure", "delete", resource[:id]
+    crm "-F", "resource", "stop", resource[:id]
+    crm "-F", "resource", "cleanup", resource[:id]
+    sleep 5
+    crm "-F", "configure", "delete", resource[:id]
 	end
 
 	def exists?
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:ensure] == :present ? true : false
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			primitive = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']")
-			!primitive.nil?
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			primitive = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']")
+			if primitive.nil? 
+        false
+      else
+        true
+      end
 		end
 	end
 
@@ -28,8 +44,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:priority]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='priority']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='priority']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='priority']")
 			if nvpair.nil?
 				:absent
 			else
@@ -50,8 +66,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:target_role]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='target-role']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+      nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='target-role']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='target-role']")
 			if nvpair.nil?
 				:absent
 			else
@@ -72,8 +88,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:is_managed]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='is-managed']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='is-managed']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='is-managed']")
 			if nvpair.nil?
 				:absent
 			else
@@ -94,8 +110,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:resource_stickiness]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='resource-stickiness']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='resource-stickiness']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='resource-stickiness']")
 			if nvpair.nil?
 				:absent
 			else
@@ -116,8 +132,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:migration_threshold]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='migration-threshold']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='migration-threshold']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='migration-threshold']")
 			if nvpair.nil?
 				:absent
 			else
@@ -138,8 +154,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:failure_timeout]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='failure-timeout']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='failure-timeout']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='failure-timeout']")
 			if nvpair.nil?
 				:absent
 			else
@@ -160,8 +176,8 @@ Puppet::Type.type(:ha_crm_primitive).provide(:crm) do
 		if resource[:only_run_on_dc] and Facter.value(:ha_cluster_dc) != Facter.value(:fqdn)
 			resource[:multiple_active]
 		else
-			cib = REXML::Document.new File.open("/var/lib/heartbeat/crm/cib.xml")
-			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='multiple-active']")
+			cib = REXML::Document.new `/usr/sbin/crm configure save xml -`
+			nvpair = REXML::XPath.first(cib, "//cib/configuration/resources/*/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='multiple-active']") || REXML::XPath.first(cib, "//cib/configuration/resources/primitive[@id='#{resource[:id]}']/meta_attributes/nvpair[@name='multiple-active']")
 			if nvpair.nil?
 				:absent
 			else

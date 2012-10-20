@@ -92,6 +92,12 @@ Puppet::Type.newtype(:ha_crm_primitive) do
 		newvalues(:absent, :block, :stop_only, :stop_start)
 		defaultto :absent
 	end
+	
+  newproperty(:ops) do
+		desc "Array of 'op' parameters.
+          Example: ['stop interval=\"0\" timeout=\"30s\"', 'start interval=\"0\" timeout=\"30s\"']"
+	  defaultto(:false) 
+  end
 
 	validate do
 		raise Puppet::Error, "You must specify a type for this primitive" unless @parameters.include?(:type)
