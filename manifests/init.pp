@@ -1,7 +1,7 @@
-import "primitive.pp"
+import "crm/primitive.pp"
 import "stonith.pp"
 import "ip.pp"
-
+class ha(){}
 define ha::authkey($method, $key="") {
     if($method == "crc") {
         $changes = ["set ${name}/method ${method}"]

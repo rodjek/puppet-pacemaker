@@ -50,9 +50,9 @@ Puppet::Type.newtype(:ha_crm_order) do
     defaultto(:true)
   end
 
-  validate do
-    raise Puppet::Error, "You must specify a first resource (first)" unless @parameters.include?(:first)
-    raise Puppet::Error, "You must specify a second resource (then)" unless @parameters.include(:then)
-    raise Puppet::Error, "You must specify a score" unless @parameters.include?(:score)
-  end
+  #validate do
+  #  defined? @parameters['first'] or raise Puppet::Error, "You must specify a first resource (first)"
+  #  defined? @parameters['then'] or raise Puppet::Error, "You must specify a second resource (then)"
+  #  defined? @parameters['has_key'] or raise Puppet::Error, "You must specify a score"
+  #end
 end
